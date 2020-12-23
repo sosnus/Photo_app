@@ -50,8 +50,8 @@ class Upload:
         print("HI___________WAIT...")
 
         # filedir = '/home/zombie/data/minio/photo' # Azure VM
-        # filedir = '/Users/stanislawpulawski/data/dockervolumes/minio/photo' # My Laptop
-        filedir = '/data/minio/photo' # Container
+        filedir = '/Users/stanislawpulawski/data/dockervolumes/minio/photo' # My Laptop
+        # filedir = '/data/minio/photo' # Container
         
         timestamp = str(int(time.time()))
         os.system("cd {} && mkdir {}".format(filedir, timestamp))
@@ -66,14 +66,14 @@ class Upload:
             fout.close() # closes the file, upload complete.
         print(wholeFilepath)    
         global lastOutputJson
-        lastOutputJson = '/data/minio/photo/'+timestamp+"/inputfile"    
+        lastOutputJson = filedir + '/'+timestamp+"/inputfile"    
         lastOutputJson = lastOutputJson.replace("inputfile", "outputfile.json")
         print("output path:::: ")
         print(lastOutputJson)    
 
         # print(newFilepath)
         # print(newFilepath.replace("inputfile", "outputfile.json"))
-        runFaceRecognitionCommand = str("python3 /app/Start.py -f {} -o {}".format(wholeFilepath, lastOutputJson))
+        runFaceRecognitionCommand = str("python3 ./Start.py -f {} -o {}".format(wholeFilepath, lastOutputJson))
         print(runFaceRecognitionCommand)
         os.system(runFaceRecognitionCommand)
         # os.system("python ./Start.py -f newFilepath -o lastOutputJson")
