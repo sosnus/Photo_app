@@ -15,18 +15,18 @@ pathlib.Path(__file__).parent.absolute()
 # os.system("ls")
 # os.system("ls /app/")
 
-# face_detector =  cv2.CascadeClassifier('./xml_detectors/haarcascades/haarcascade_frontalface_default.xml')
-# eye_detector_1 = cv2.CascadeClassifier('./xml_detectors/haarcascades/haarcascade_eye_tree_eyeglasses.xml')
-# eye_detector_2 = cv2.CascadeClassifier('./xml_detectors/haarcascades/haarcascade_eye.xml')
-# eye_detector_3 = cv2.CascadeClassifier('./xml_detectors/haarcascades/haarcascade_lefteye_2splits.xml')
-# smile_detector = cv2.CascadeClassifier('./xml_detectors/haarcascades/haarcascade_smile.xml')
+face_detector =  cv2.CascadeClassifier('./xml_detectors/haarcascades/haarcascade_frontalface_default.xml')
+eye_detector_1 = cv2.CascadeClassifier('./xml_detectors/haarcascades/haarcascade_eye_tree_eyeglasses.xml')
+eye_detector_2 = cv2.CascadeClassifier('./xml_detectors/haarcascades/haarcascade_eye.xml')
+eye_detector_3 = cv2.CascadeClassifier('./xml_detectors/haarcascades/haarcascade_lefteye_2splits.xml')
+smile_detector = cv2.CascadeClassifier('./xml_detectors/haarcascades/haarcascade_smile.xml')
 
 
-face_detector =  cv2.CascadeClassifier('/app/xml_detectors/haarcascades/haarcascade_frontalface_default.xml')
-eye_detector_1 = cv2.CascadeClassifier('/app/xml_detectors/haarcascades/haarcascade_eye_tree_eyeglasses.xml')
-eye_detector_2 = cv2.CascadeClassifier('/app/xml_detectors/haarcascades/haarcascade_eye.xml')
-eye_detector_3 = cv2.CascadeClassifier('/app/xml_detectors/haarcascades/haarcascade_lefteye_2splits.xml')
-smile_detector = cv2.CascadeClassifier('/app/xml_detectors/haarcascades/haarcascade_smile.xml')
+# face_detector =  cv2.CascadeClassifier('/app/xml_detectors/haarcascades/haarcascade_frontalface_default.xml')
+# eye_detector_1 = cv2.CascadeClassifier('/app/xml_detectors/haarcascades/haarcascade_eye_tree_eyeglasses.xml')
+# eye_detector_2 = cv2.CascadeClassifier('/app/xml_detectors/haarcascades/haarcascade_eye.xml')
+# eye_detector_3 = cv2.CascadeClassifier('/app/xml_detectors/haarcascades/haarcascade_lefteye_2splits.xml')
+# smile_detector = cv2.CascadeClassifier('/app/xml_detectors/haarcascades/haarcascade_smile.xml')
 
 args = parser.parse_args()
 img_path = args.path
@@ -61,7 +61,7 @@ gray_img = cv2.cvtColor(resized_img, cv2.COLOR_BGR2GRAY)
 print("Begining Detection")
 face = face_detector.detectMultiScale(gray_img, 1.2, 5)
 print("Ending Detection")
-if len(face) is not 1:
+if len(face) != 1:
     save_json(Face, Eyes, Smile)
     print("NO FACE DETECTED")
     exit(0)
@@ -98,7 +98,7 @@ for (x, y, w, h) in face:
         else:
             remove.append(True)
     eye_pairs = list(it.compress(eye_pairs, remove))
-    if len(eye_pairs) is 1:
+    if len(eye_pairs) == 1:
         Eyes = True
         center_min = min(eye_pairs[0][0][0]+(eye_pairs[0][0][2]/2), eye_pairs[0][1][0]+(eye_pairs[0][1][2]/2))
         center_max = max(eye_pairs[0][0][0] + (eye_pairs[0][0][2] / 2), eye_pairs[0][1][0] + (eye_pairs[0][1][2] / 2))
@@ -117,7 +117,7 @@ for (x, y, w, h) in face:
             else:
                 remove.append(False)
     smiles = list(it.compress(smiles, remove))
-    if len(smiles) is 1:
+    if len(smiles) == 1:
         Smile = True
     else:
         save_json(Face, Eyes, Smile)
