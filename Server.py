@@ -1,6 +1,6 @@
 import web
 import os 
-import time;
+import time
 import json
 
 urls = (
@@ -13,8 +13,7 @@ lastOutputJson = "nofile.json"
 
 class Index:
     def GET(self):
-        return "Hello, world!"
-
+        return "Hi!, use /upload"
 
 class Result:
     def GET(self):
@@ -73,6 +72,9 @@ class Upload:
 
         # print(newFilepath)
         # print(newFilepath.replace("inputfile", "outputfile.json"))
+        runContrastCommand = str("python3 ./contrast.py -f {} -o {}".format(wholeFilepath, lastOutputJson))
+        print(runContrastCommand)
+        os.system(runContrastCommand)
         runFaceRecognitionCommand = str("python3 ./Start.py -f {} -o {}".format(wholeFilepath, lastOutputJson))
         print(runFaceRecognitionCommand)
         os.system(runFaceRecognitionCommand)
