@@ -144,10 +144,10 @@ save_json(Face, Eyes, Smile, './tmp/output2.json')
 #         'Smile': Smile
 #     }, outfile) # save to json file
 
-os_command_todo = "mv" + " ./output.json " + " ./tmp/output2.json"
-os.system(os_command_todo)
-output_path = output_path.replace("inputfile", "outputfile.json")
-os_command_copy = "cp" + " ./tmp/output.json " + output_path 
+# os_command_todo = "mv" + " ./output.json " + " ./tmp/output2.json"
+# os.system(os_command_todo)
+# output_path = output_path.replace("inputfile", "outputfile.json")
+# os_command_copy = "cp" + " ./tmp/output.json " + output_path 
 #" ./tmp/output.json"
 # copyCommand = "mv" + " ./output.json " + output_path
-os.system(os_command_copy)
+# os.system(os_command_copy)

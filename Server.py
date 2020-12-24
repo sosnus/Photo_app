@@ -81,6 +81,14 @@ class Upload:
         runFaceRecognitionCommand = str("python3 ./Start.py -f {} -o {} -n {}".format(wholeFilepath, lastOutputJson, x['myfile'].filename))
         print(runFaceRecognitionCommand)
         os.system(runFaceRecognitionCommand)
+
+        print(pathInputFile)
+        print("!!!!!!pathInputFile")
+        os.system("cp ./tmp/output1.json {} ".format(pathInputFile.replace("inputfile", "output1.json")))
+        os.system("cp ./tmp/output2.json {} ".format(pathInputFile.replace("inputfile", "output2.json")))
+        os.system("cp ./tmp/{} {} ".format(x['myfile'].filename, pathInputFile.replace("inputfile", x['myfile'].filename)))
+        os.system("cp ./tmp/out-face-{} {} ".format(x['myfile'].filename, pathInputFile.replace("inputfile", str('out-face-' + x['myfile'].filename))))
+
         # os.system("python ./Start.py -f newFilepath -o lastOutputJson")
         # os.system("python /app/Wait.py -t 1")
         print("HI___________END...")
