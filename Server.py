@@ -11,17 +11,24 @@ urls = (
 
 lastOutputJson = "nofile.json"
 
+pwdToLastTimestamp = '/dev/null'
+
+
 class Index:
     def GET(self):
         return "Hi!, use /upload"
 
 class Result:
     def GET(self):
-        print(lastOutputJson)
-        # with open(lastOutputJson) as json_file:
-        #     data = json.load(json_file)
-        #     return json.dumps(data)
-
+        print(pwdToLastTimestamp)
+        newRespond = {}
+        with open(str(pwdToLastTimestamp + 'output1.json')) as json_file:
+            newRespond = json.load(json_file)
+            # return json.dumps(data)
+        with open(str(pwdToLastTimestamp + 'output2.json')) as json_file:
+            newRespond.update(json.load(json_file))
+            # return json.dumps(data)
+        return json.dumps(newRespond)
         # with open('lastOutputJson', 'r') as outfile:
             # print(str(json_file))
         return "Result!"
@@ -43,10 +50,8 @@ class Upload:
 
     def POST(self):
         x = web.input(myfile={})
-        print("HI________________")
+        print("_____ NEW POST on /upload...")
         web.debug(x['myfile'].filename) # This is the filename
-    # ??    web.debug(x['myfile'].value) # This is the file contents
-        print("HI___________WAIT...")
 
         # filedir = '/home/zombie/data/minio/photo' # Azure VM
         filedir = '/Users/stanislawpulawski/data/dockervolumes/minio/photo' # My Laptop
@@ -60,19 +65,12 @@ class Upload:
             wholeFilepath = str(filedir +'/'+ timestamp +'/'+ 'inputfile')
             fout = open(filedir +'/'+ timestamp +'/'+ 'inputfile','wb') # creates the file where the uploaded file should be stored
             fout = open(wholeFilepath,'wb') # creates the file where the uploaded file should be stored
-            # fout = open(filedir +'/'+ filename,'wb') # creates the file where the uploaded file should be stored
             fout.write(x.myfile.file.read()) # writes the uploaded file to the newly created file.
             fout.close() # closes the file, upload complete.
-        print(wholeFilepath)    
         global lastOutputJson
         pathInputFile = filedir + '/'+timestamp+"/inputfile"    
         lastOutputJson = filedir + '/'+timestamp+"/inputfile"    
         lastOutputJson = lastOutputJson.replace("inputfile", "outputfile.json")
-        print("output path:::: ")
-        print(lastOutputJson)    
-
-        # print(newFilepath)
-        # print(newFilepath.replace("inputfile", "outputfile.json"))
 
         os.system("cp {} ./tmp/{}".format(pathInputFile, x['myfile'].filename))
         runContrastCommand = str("python3 ./contrast.py -f {} -o {} -n {}".format(wholeFilepath, lastOutputJson, x['myfile'].filename))
@@ -82,16 +80,20 @@ class Upload:
         print(runFaceRecognitionCommand)
         os.system(runFaceRecognitionCommand)
 
+
         print(pathInputFile)
-        print("!!!!!!pathInputFile")
+        print("AAAAAAAAAAA")
+        global pwdToLastTimestamp
+        print(pwdToLastTimestamp)
+        pwdToLastTimestamp = str(pathInputFile.replace("/inputfile", "/"))
+        print(pwdToLastTimestamp)
+        print("_____ Copy all to timestamp folder...")
         os.system("cp ./tmp/output1.json {} ".format(pathInputFile.replace("inputfile", "output1.json")))
         os.system("cp ./tmp/output2.json {} ".format(pathInputFile.replace("inputfile", "output2.json")))
         os.system("cp ./tmp/{} {} ".format(x['myfile'].filename, pathInputFile.replace("inputfile", x['myfile'].filename)))
         os.system("cp ./tmp/out-face-{} {} ".format(x['myfile'].filename, pathInputFile.replace("inputfile", str('out-face-' + x['myfile'].filename))))
 
-        # os.system("python ./Start.py -f newFilepath -o lastOutputJson")
-        # os.system("python /app/Wait.py -t 1")
-        print("HI___________END...")
+        print("_____ Done, return /result...")
         raise web.seeother('/result')
 
 if __name__ == "__main__":
