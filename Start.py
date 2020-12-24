@@ -9,8 +9,13 @@ import os
 parser = ArgumentParser()
 parser.add_argument("-f", "--file", dest="path", help="Provide PATH to photo")
 parser.add_argument("-o", "--output", dest="outputPath", help="Provide PATH to photo")
+parser.add_argument("-n", "--name", dest="nameFile", help="filename")
 import pathlib
 pathlib.Path(__file__).parent.absolute()
+args = parser.parse_args()
+
+print("______________________")
+print(args.nameFile)
 # os.system("pwd")
 # os.system("ls")
 # os.system("ls /app/")
@@ -28,7 +33,6 @@ smile_detector = cv2.CascadeClassifier('./xml_detectors/haarcascades/haarcascade
 # eye_detector_3 = cv2.CascadeClassifier('/app/xml_detectors/haarcascades/haarcascade_lefteye_2splits.xml')
 # smile_detector = cv2.CascadeClassifier('/app/xml_detectors/haarcascades/haarcascade_smile.xml')
 
-args = parser.parse_args()
 img_path = args.path
 output_path = args.outputPath
 
@@ -62,7 +66,7 @@ print("Begining Detection")
 face = face_detector.detectMultiScale(gray_img, 1.2, 5)
 print("Ending Detection")
 if len(face) != 1:
-    save_json(Face, Eyes, Smile)
+    save_json(Face, Eyes, Smile, './tmp/output2.json')
     print("NO FACE DETECTED")
     exit(0)
 
@@ -75,7 +79,7 @@ for (x, y, w, h) in face:
     smiles = smile_detector.detectMultiScale(roi_grey, 1.2, 6, minSize=(30, 60))
     remove = []
     if len(eyes) < 2:
-        save_json(Face, Eyes, Smile)
+        save_json(Face, Eyes, Smile, './tmp/output2.json')
         exit(0)
     for (ex, ey, ew, eh) in eyes:
         cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 2)
@@ -87,7 +91,7 @@ for (x, y, w, h) in face:
     eye_pairs = list(it.combinations(eyes, 2))
     remove = []
     if len(eyes) < 2:
-        save_json(Face, Eyes, Smile)
+        save_json(Face, Eyes, Smile, './tmp/output2.json')
         exit(0)
     for (eye_1, eye_2) in eye_pairs:
         # print(f"[{eye_1}, {eye_2}]")
@@ -102,7 +106,7 @@ for (x, y, w, h) in face:
         center_min = min(eye_pairs[0][0][0]+(eye_pairs[0][0][2]/2), eye_pairs[0][1][0]+(eye_pairs[0][1][2]/2))
         center_max = max(eye_pairs[0][0][0] + (eye_pairs[0][0][2] / 2), eye_pairs[0][1][0] + (eye_pairs[0][1][2] / 2))
     else:
-        save_json(Face, Eyes, Smile)
+        save_json(Face, Eyes, Smile, './tmp/output2.json')
         exit(0)
     print(eye_pairs)
     remove = []
@@ -119,17 +123,27 @@ for (x, y, w, h) in face:
     if len(smiles) == 1:
         Smile = True
     else:
-        save_json(Face, Eyes, Smile)
+        save_json(Face, Eyes, Smile, './tmp/output2.json')
 
 #save all to ./tmp/
-cv2.imwrite('./tmp/Detected.jpg', resized_img)
 # //TODO: 1. linki do json
 # //TODO: 1. kopiowanie jsonow
 # //TODO: 1. kompatybilnosc vm/MAC
 # //TODO: 1. wstawic drugi skrypt
 # //TODO: 1. clean comments
 # //TODO: 1. 
-save_json(Face, Eyes, Smile)
+
+cv2.imwrite(str('./tmp/out-face-' + args.nameFile), resized_img)
+# cv2.imwrite('./tmp/Detected.jpg', resized_img)
+save_json(Face, Eyes, Smile, './tmp/output2.json')
+
+# with open('./tmp/output2.json', 'w') as outfile:
+#     json.dump({
+#         'Face': Face,
+#         'Eyes': Eyes,
+#         'Smile': Smile
+#     }, outfile) # save to json file
+
 os_command_todo = "mv" + " ./output.json " + " ./tmp/output2.json"
 os.system(os_command_todo)
 output_path = output_path.replace("inputfile", "outputfile.json")

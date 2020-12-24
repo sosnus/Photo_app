@@ -18,12 +18,12 @@ class Index:
 class Result:
     def GET(self):
         print(lastOutputJson)
-        with open(lastOutputJson) as json_file:
-            data = json.load(json_file)
-            return json.dumps(data)
+        # with open(lastOutputJson) as json_file:
+        #     data = json.load(json_file)
+        #     return json.dumps(data)
 
         # with open('lastOutputJson', 'r') as outfile:
-            print(str(json_file))
+            # print(str(json_file))
         return "Result!"
 
 
@@ -65,6 +65,7 @@ class Upload:
             fout.close() # closes the file, upload complete.
         print(wholeFilepath)    
         global lastOutputJson
+        pathInputFile = filedir + '/'+timestamp+"/inputfile"    
         lastOutputJson = filedir + '/'+timestamp+"/inputfile"    
         lastOutputJson = lastOutputJson.replace("inputfile", "outputfile.json")
         print("output path:::: ")
@@ -72,10 +73,12 @@ class Upload:
 
         # print(newFilepath)
         # print(newFilepath.replace("inputfile", "outputfile.json"))
-        runContrastCommand = str("python3 ./contrast.py -f {} -o {}".format(wholeFilepath, lastOutputJson))
+
+        os.system("cp {} ./tmp/{}".format(pathInputFile, x['myfile'].filename))
+        runContrastCommand = str("python3 ./contrast.py -f {} -o {} -n {}".format(wholeFilepath, lastOutputJson, x['myfile'].filename))
         print(runContrastCommand)
         os.system(runContrastCommand)
-        runFaceRecognitionCommand = str("python3 ./Start.py -f {} -o {}".format(wholeFilepath, lastOutputJson))
+        runFaceRecognitionCommand = str("python3 ./Start.py -f {} -o {} -n {}".format(wholeFilepath, lastOutputJson, x['myfile'].filename))
         print(runFaceRecognitionCommand)
         os.system(runFaceRecognitionCommand)
         # os.system("python ./Start.py -f newFilepath -o lastOutputJson")
