@@ -66,7 +66,6 @@ if len(face) != 1:
     print("NO FACE DETECTED")
     exit(0)
 
-
 for (x, y, w, h) in face:
     Face = True
     cv2.rectangle(resized_img, (x, y), (x + w, y + h), (127, 0, 255), 2)
@@ -122,8 +121,19 @@ for (x, y, w, h) in face:
     else:
         save_json(Face, Eyes, Smile)
 
-cv2.imwrite('Detected.jpg', resized_img)
+#save all to ./tmp/
+cv2.imwrite('./tmp/Detected.jpg', resized_img)
+# //TODO: 1. linki do json
+# //TODO: 1. kopiowanie jsonow
+# //TODO: 1. kompatybilnosc vm/MAC
+# //TODO: 1. wstawic drugi skrypt
+# //TODO: 1. clean comments
+# //TODO: 1. 
 save_json(Face, Eyes, Smile)
+os_command_todo = "mv" + " ./output.json " + " ./tmp/output2.json"
+os.system(os_command_todo)
 output_path = output_path.replace("inputfile", "outputfile.json")
-copyCommand = "mv" + " ./output.json " + output_path
-os.system(copyCommand)
+os_command_copy = "cp" + " ./tmp/output.json " + output_path 
+#" ./tmp/output.json"
+# copyCommand = "mv" + " ./output.json " + output_path
+os.system(os_command_copy)
