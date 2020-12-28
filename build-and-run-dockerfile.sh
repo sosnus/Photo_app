@@ -1,5 +1,6 @@
 docker rm -f opencvtestcontainer
-docker build --no-cache  -t opencvtest .
+docker build -t opencvtest .
+# docker build --no-cache  -t opencvtest .
 
 # docker run -d -p 8080:8080 -it -v /Users/stanislawpulawski/data/dockervolumes/minio/photo:/data/minio/photo --name=opencvtestcontainer --restart=always opencvtest
 docker run -d -p 8080:8080 -it -v /home/zombie/data/minio/photo:/data/minio/photo --name=opencvtestcontainer --restart=always opencvtest
