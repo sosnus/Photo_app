@@ -3,6 +3,11 @@ import os
 import time
 import json
 
+os.system("pwd")
+os.system("ls")
+os.system("ls ./tmp")
+os.system("ls -l")
+
 urls = (
     '/', 'Index',
     '/upload', 'Upload',
@@ -54,8 +59,8 @@ class Upload:
         web.debug(x['myfile'].filename) # This is the filename
 
         # filedir = '/home/zombie/data/minio/photo' # Azure VM
-        filedir = '/Users/stanislawpulawski/data/dockervolumes/minio/photo' # My Laptop
-        # filedir = '/data/minio/photo' # Container
+        # filedir = '/Users/stanislawpulawski/data/dockervolumes/minio/photo' # My Laptop
+        filedir = '/data/minio/photo' # Container
         
         timestamp = str(int(time.time()))
         os.system("cd {} && mkdir {}".format(filedir, timestamp))
@@ -88,6 +93,7 @@ class Upload:
         pwdToLastTimestamp = str(pathInputFile.replace("/inputfile", "/"))
         print(pwdToLastTimestamp)
         print("_____ Copy all to timestamp folder...")
+
         os.system("cp ./tmp/output1.json {} ".format(pathInputFile.replace("inputfile", "output1.json")))
         os.system("cp ./tmp/output2.json {} ".format(pathInputFile.replace("inputfile", "output2.json")))
         os.system("cp ./tmp/{} {} ".format(x['myfile'].filename, pathInputFile.replace("inputfile", x['myfile'].filename)))
