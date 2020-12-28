@@ -5,6 +5,7 @@ import json
 
 os.system("pwd")
 os.system("ls")
+os.system("mkdir tmp")
 os.system("ls ./tmp")
 os.system("ls -l")
 
@@ -17,7 +18,6 @@ urls = (
 lastOutputJson = "nofile.json"
 
 pwdToLastTimestamp = '/dev/null'
-
 
 class Index:
     def GET(self):
@@ -78,25 +78,25 @@ class Upload:
         lastOutputJson = lastOutputJson.replace("inputfile", "outputfile.json")
 
         os.system("cp {} ./tmp/{}".format(pathInputFile, x['myfile'].filename))
-        runContrastCommand = str("python3 ./contrast.py -f {} -o {} -n {}".format(wholeFilepath, lastOutputJson, x['myfile'].filename))
+        print("_____ Run open-cv scripts...")
+        runContrastCommand = str("python3 ./contrast.py -f {} -n {}".format(wholeFilepath, x['myfile'].filename))
         print(runContrastCommand)
         os.system(runContrastCommand)
-        runFaceRecognitionCommand = str("python3 ./Start.py -f {} -o {} -n {}".format(wholeFilepath, lastOutputJson, x['myfile'].filename))
+        runFaceRecognitionCommand = str("python3 ./Start.py -f {} -n {}".format(wholeFilepath, x['myfile'].filename))
         print(runFaceRecognitionCommand)
         os.system(runFaceRecognitionCommand)
 
-
-        print(pathInputFile)
-        print("AAAAAAAAAAA")
         global pwdToLastTimestamp
-        print(pwdToLastTimestamp)
         pwdToLastTimestamp = str(pathInputFile.replace("/inputfile", "/"))
         print(pwdToLastTimestamp)
         print("_____ Copy all to timestamp folder...")
 
-        os.system("cp ./tmp/output1.json {} ".format(pathInputFile.replace("inputfile", "output1.json")))
-        os.system("cp ./tmp/output2.json {} ".format(pathInputFile.replace("inputfile", "output2.json")))
         os.system("cp ./tmp/{} {} ".format(x['myfile'].filename, pathInputFile.replace("inputfile", x['myfile'].filename)))
+
+        os.system("cp ./tmp/output1.json {} ".format(pathInputFile.replace("inputfile", "output1.json")))
+        os.system("cp ./tmp/out-contrast-{} {} ".format(x['myfile'].filename, pathInputFile.replace("inputfile", x['myfile'].filename)))
+
+        os.system("cp ./tmp/output2.json {} ".format(pathInputFile.replace("inputfile", "output2.json")))
         os.system("cp ./tmp/out-face-{} {} ".format(x['myfile'].filename, pathInputFile.replace("inputfile", str('out-face-' + x['myfile'].filename))))
 
         print("_____ Done, return /result...")
