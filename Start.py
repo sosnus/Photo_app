@@ -8,7 +8,7 @@ import os
 
 parser = ArgumentParser()
 parser.add_argument("-f", "--file", dest="path", help="Provide PATH to photo")
-parser.add_argument("-o", "--output", dest="outputPath", help="Provide PATH to photo")
+# parser.add_argument("-o", "--output", dest="outputPath", help="Provide PATH to photo")
 parser.add_argument("-n", "--name", dest="nameFile", help="filename")
 import pathlib
 pathlib.Path(__file__).parent.absolute()
@@ -34,7 +34,7 @@ smile_detector = cv2.CascadeClassifier('./xml_detectors/haarcascades/haarcascade
 # smile_detector = cv2.CascadeClassifier('/app/xml_detectors/haarcascades/haarcascade_smile.xml')
 
 img_path = args.path
-output_path = args.outputPath
+# output_path = args.outputPath
 
 img_open = cv2.imread(img_path, cv2.IMREAD_UNCHANGED)
 # img_open2 = cv2.imread('Data\\CV_photo.jpg', cv2.IMREAD_UNCHANGED)
