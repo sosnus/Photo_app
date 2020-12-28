@@ -5,7 +5,7 @@ import json
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-f', help="Path to the input photo", type=str)
-parser.add_argument("-o", "--output", dest="outputPath", help="Provide PATH to photo")
+# parser.add_argument("-o", "--output", dest="outputPath", help="Provide PATH to photo")
 parser.add_argument("-n", "--name", dest="nameFile", help="filename")
 
 args = parser.parse_args()
@@ -43,8 +43,8 @@ if counter <= percent_of_pixel:
     # cv2.imshow("original", image)
     # cv2.imshow("clahe", CLAHE_img)
     
-    cv2.imwrite(str('./tmp/out-back-' + str(args.nameFile) +'_out_contrast.png'),CLAHE_img)
-    cv2.imwrite(str(args.f.split('.')[0])+'_fixed_photo.png',CLAHE_img)
+    cv2.imwrite(str('./tmp/out-contrast-' + str(args.nameFile)),CLAHE_img)
+    # cv2.imwrite(str(args.f.split('.')[0])+'_fixed_photo.png',CLAHE_img)
     jsondata['contrast_fix'] = True
 
 else:
