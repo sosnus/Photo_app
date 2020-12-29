@@ -7,7 +7,16 @@ os.system("pwd")
 os.system("ls")
 os.system("mkdir tmp")
 os.system("ls ./tmp")
+os.system("rm -r -f -d ./tmp/*")
+print("CLEAN ./tmp/*!")
+os.system("ls ./tmp")
 os.system("ls -l")
+
+def clean_tmp_folder():
+    os.system("ls ./tmp")
+    os.system("rm -r -f -d ./tmp/*")
+    print("CLEAN ./tmp/*!")
+    os.system("ls ./tmp")
 
 urls = (
     '/', 'Index',
@@ -54,13 +63,14 @@ class Upload:
 </body></html>"""
 
     def POST(self):
+        clean_tmp_folder()
         x = web.input(myfile={})
         print("_____ NEW POST on /upload...")
         web.debug(x['myfile'].filename) # This is the filename
 
         # filedir = '/home/zombie/data/minio/photo' # Azure VM
-        # filedir = '/Users/stanislawpulawski/data/dockervolumes/minio/photo' # My Laptop
-        filedir = '/data/minio/photo' # Container
+        filedir = '/Users/stanislawpulawski/data/dockervolumes/minio/photo' # My Laptop
+        # filedir = '/data/minio/photo' # Container
         
         timestamp = str(int(time.time()))
         os.system("cd {} && mkdir {}".format(filedir, timestamp))
