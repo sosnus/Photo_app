@@ -40,7 +40,8 @@ if img.shape[1] < img.shape[0]:
     print(">>OK, portrait!")
 else:
     print(">>BAD, landscape, must be rotated!")
-    img = cv2.rotate(img, cv2.cv2.ROTATE_90_CLOCKWISE) 
+    img = cv2.rotate(img, cv2.cv2.ROTATE_90_COUNTERCLOCKWISE) 
+    # img = cv2.rotate(img, cv2.cv2.ROTATE_90_CLOCKWISE) 
 print(">>Size : ", img.shape)
 
 scale_percent = 600 / img.shape[1]
