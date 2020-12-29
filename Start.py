@@ -13,17 +13,12 @@ def epilog():
 
 parser = ArgumentParser()
 parser.add_argument("-f", "--file", dest="path", help="Provide PATH to photo")
-# parser.add_argument("-o", "--output", dest="outputPath", help="Provide PATH to photo")
 parser.add_argument("-n", "--name", dest="nameFile", help="filename")
 import pathlib
 pathlib.Path(__file__).parent.absolute()
 args = parser.parse_args()
 
-print("______________________")
 print(args.nameFile)
-# os.system("pwd")
-# os.system("ls")
-# os.system("ls /app/")
 
 face_detector =  cv2.CascadeClassifier('./xml_detectors/haarcascades/haarcascade_frontalface_default.xml')
 eye_detector_1 = cv2.CascadeClassifier('./xml_detectors/haarcascades/haarcascade_eye_tree_eyeglasses.xml')
@@ -31,20 +26,8 @@ eye_detector_2 = cv2.CascadeClassifier('./xml_detectors/haarcascades/haarcascade
 eye_detector_3 = cv2.CascadeClassifier('./xml_detectors/haarcascades/haarcascade_lefteye_2splits.xml')
 smile_detector = cv2.CascadeClassifier('./xml_detectors/haarcascades/haarcascade_smile.xml')
 
-
-# face_detector =  cv2.CascadeClassifier('/app/xml_detectors/haarcascades/haarcascade_frontalface_default.xml')
-# eye_detector_1 = cv2.CascadeClassifier('/app/xml_detectors/haarcascades/haarcascade_eye_tree_eyeglasses.xml')
-# eye_detector_2 = cv2.CascadeClassifier('/app/xml_detectors/haarcascades/haarcascade_eye.xml')
-# eye_detector_3 = cv2.CascadeClassifier('/app/xml_detectors/haarcascades/haarcascade_lefteye_2splits.xml')
-# smile_detector = cv2.CascadeClassifier('/app/xml_detectors/haarcascades/haarcascade_smile.xml')
-
 img_path = args.path
-# output_path = args.outputPath
-
 img_open = cv2.imread(img_path, cv2.IMREAD_UNCHANGED)
-# img_open2 = cv2.imread('Data\\CV_photo.jpg', cv2.IMREAD_UNCHANGED)
-# img_closed = cv2.imread('Data\\IMG_20201216_185903.jpg', cv2.IMREAD_UNCHANGED)
-
 
 img = img_open
 eye_detector = eye_detector_2
@@ -52,7 +35,14 @@ Face = False
 Eyes = False
 Smile = False
 
-print("Size : ", img.shape)
+print(">>Size : ", img.shape)
+if img.shape[1] < img.shape[0]:
+    print(">>OK, portrait!")
+else:
+    print(">>BAD, landscape, must be rotated!")
+    img = cv2.rotate(img, cv2.cv2.ROTATE_90_CLOCKWISE) 
+print(">>Size : ", img.shape)
+
 scale_percent = 600 / img.shape[1]
 n_width = int(img.shape[1] * scale_percent)
 n_heigh = int(img.shape[0] * scale_percent)
@@ -137,38 +127,9 @@ for (x, y, w, h) in face:
     else:
         save_json(Face, Eyes, Smile, './tmp/output2.json')
 
-#save all to ./tmp/
-# //TODO: 1. linki do json
-# //TODO: 1. kopiowanie jsonow
-# //TODO: 1. kompatybilnosc vm/MAC
-# //TODO: 1. wstawic drugi skrypt
-# //TODO: 1. clean comments
-# //TODO: 1. 
-
 epilog()
 
-
-print("QQQQ: {}".format(args.nameFile))
 cv2.imwrite(str('./tmp/out-face-' + args.nameFile), resized_img)
-# cv2.imwrite('./tmp/Detected.jpg', resized_img)
 save_json(Face, Eyes, Smile, './tmp/output2.json')
-
-
-
-
-# with open('./tmp/output2.json', 'w') as outfile:
-#     json.dump({
-#         'Face': Face,
-#         'Eyes': Eyes,
-#         'Smile': Smile
-#     }, outfile) # save to json file
-
-# os_command_todo = "mv" + " ./output.json " + " ./tmp/output2.json"
-# os.system(os_command_todo)
-# output_path = output_path.replace("inputfile", "outputfile.json")
-# os_command_copy = "cp" + " ./tmp/output.json " + output_path 
-#" ./tmp/output.json"
-# copyCommand = "mv" + " ./output.json " + output_path
-# os.system(os_command_copy)
 
 print("EOF Start.py")
