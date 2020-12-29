@@ -5,6 +5,11 @@ from Tools import save_json
 from argparse import ArgumentParser
 import os 
 
+def epilog():
+    print(">>>> EPILOG")
+    cv2.imwrite(str('./tmp/out-face-' + args.nameFile), resized_img)
+    save_json(Face, Eyes, Smile, './tmp/output2.json')
+    exit(0)
 
 parser = ArgumentParser()
 parser.add_argument("-f", "--file", dest="path", help="Provide PATH to photo")
@@ -66,6 +71,7 @@ print("Begining Detection")
 face = face_detector.detectMultiScale(gray_img, 1.2, 5)
 print("Ending Detection")
 if len(face) != 1:
+    epilog()
     save_json(Face, Eyes, Smile, './tmp/output2.json')
     print("NO FACE DETECTED")
     exit(0)
@@ -79,7 +85,9 @@ for (x, y, w, h) in face:
     smiles = smile_detector.detectMultiScale(roi_grey, 1.2, 6, minSize=(30, 60))
     remove = []
     if len(eyes) < 2:
+        epilog()
         save_json(Face, Eyes, Smile, './tmp/output2.json')
+        print("exit(0)")
         exit(0)
     for (ex, ey, ew, eh) in eyes:
         cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 2)
@@ -91,7 +99,9 @@ for (x, y, w, h) in face:
     eye_pairs = list(it.combinations(eyes, 2))
     remove = []
     if len(eyes) < 2:
+        epilog()
         save_json(Face, Eyes, Smile, './tmp/output2.json')
+        print("exit(0)")
         exit(0)
     for (eye_1, eye_2) in eye_pairs:
         # print(f"[{eye_1}, {eye_2}]")
@@ -106,7 +116,9 @@ for (x, y, w, h) in face:
         center_min = min(eye_pairs[0][0][0]+(eye_pairs[0][0][2]/2), eye_pairs[0][1][0]+(eye_pairs[0][1][2]/2))
         center_max = max(eye_pairs[0][0][0] + (eye_pairs[0][0][2] / 2), eye_pairs[0][1][0] + (eye_pairs[0][1][2] / 2))
     else:
+        epilog()
         save_json(Face, Eyes, Smile, './tmp/output2.json')
+        print("exit(0)")
         exit(0)
     print(eye_pairs)
     remove = []
@@ -133,9 +145,16 @@ for (x, y, w, h) in face:
 # //TODO: 1. clean comments
 # //TODO: 1. 
 
+epilog()
+
+
+print("QQQQ: {}".format(args.nameFile))
 cv2.imwrite(str('./tmp/out-face-' + args.nameFile), resized_img)
 # cv2.imwrite('./tmp/Detected.jpg', resized_img)
 save_json(Face, Eyes, Smile, './tmp/output2.json')
+
+
+
 
 # with open('./tmp/output2.json', 'w') as outfile:
 #     json.dump({
@@ -151,3 +170,5 @@ save_json(Face, Eyes, Smile, './tmp/output2.json')
 #" ./tmp/output.json"
 # copyCommand = "mv" + " ./output.json " + output_path
 # os.system(os_command_copy)
+
+print("EOF Start.py")
