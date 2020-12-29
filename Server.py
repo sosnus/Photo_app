@@ -38,17 +38,10 @@ class Result:
         newRespond = {}
         with open(str(pwdToLastTimestamp + 'output1.json')) as json_file:
             newRespond = json.load(json_file)
-            # return json.dumps(data)
         with open(str(pwdToLastTimestamp + 'output2.json')) as json_file:
             newRespond.update(json.load(json_file))
-            # return json.dumps(data)
         return json.dumps(newRespond)
-        # with open('lastOutputJson', 'r') as outfile:
-            # print(str(json_file))
-        return "Result!"
-
-
-
+        return "Result Error!"
 
 class Upload:
     def GET(self):
